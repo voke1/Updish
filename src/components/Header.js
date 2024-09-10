@@ -4,16 +4,13 @@ import tw from "twrnc";
 import MenuBar from "./MenuBar";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-// import { UtilsContext } from "../../general/contexts/utils/state";
 
 const Header = ({ route, title }) => {
-//   const { toggleStatusBarColor } = useContext(UtilsContext);
   const navigation = useNavigation();
   const { width } = Dimensions.get("window");
 
   const toggler = () => {
     navigation.toggleDrawer();
-    // toggleStatusBarColor("light");
   };
 
   if (route == "home")
@@ -81,8 +78,7 @@ const Header = ({ route, title }) => {
         </Text>
         <TouchableOpacity
           onPress={() => {
-            // toggleStatusBarColor();
-            navigation.navigate("notifications");
+            console.log("PRESSED!");
           }}
         >
           <MaterialCommunityIcons name="bell-badge" size={26} color="white" />

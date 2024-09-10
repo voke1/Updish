@@ -72,12 +72,11 @@ const ProductScreen = ({ route, navigation }) => {
                       tw`mb-7`,
                       {
                         flexDirection: "row",
+                        
                       },
                     ]}
                     onPress={() => {
-                      navigation.navigate("event", {
-                        eventId: item.id,
-                      });
+                      console.log('PRESSED')
                     }}
                   >
                     <View style={{ flex: 1 }}>
@@ -110,9 +109,10 @@ const ProductScreen = ({ route, navigation }) => {
                           {item.price}
                         </Text>
                         <View style={tw`mx-2`}>
-                         
-                          <Image source={star} style={{width: 10, height: 10}}/>
-
+                          <Image
+                            source={star}
+                            style={{ width: 10, height: 10 }}
+                          />
                         </View>
                         <Text
                           style={[
@@ -130,7 +130,7 @@ const ProductScreen = ({ route, navigation }) => {
                         style={[
                           tw`p-1 rounded-2xl`,
                           {
-                            backgroundColor: "#8C63EE",
+                            backgroundColor: "#FF9431",
                             width: 100,
                           },
                         ]}

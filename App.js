@@ -12,7 +12,7 @@ import {
   Raleway_100Thin,
 } from "@expo-google-fonts/raleway";
 
-//Navigation
+// Navigation
 import GeneralStackNavigation from "./src/navigator.js";
 
 // State
@@ -31,13 +31,16 @@ const App = () => {
 
   useEffect(() => {
     const prepare = async () => {
-      // keep the splash screen visible while we fetch resources
+      // Keep the splash screen visible while we fetch resources
       await SplashScreen.preventAutoHideAsync();
+
       try {
+        // Simulate a delay of 2 seconds to keep the splash screen visible
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       } catch (e) {
-        return;
+        console.warn(e);
       } finally {
-        // tell the application to render
+        // After the delay, set app as ready
         setAppIsReady(true);
       }
     };
@@ -51,19 +54,12 @@ const App = () => {
     }
   }, [appIsReady, fontsLoaded]);
 
-  if (!fontsLoaded) {
-    return;
-  }
-
-  if (!appIsReady) {
-    return;
+  if (!fontsLoaded || !appIsReady) {
+    return null;
   }
 
   return (
-    <SafeAreaProvider
-      style={{ flex: 1 }}
-      onLayout={onLayoutRootView}
-    >
+    <SafeAreaProvider style={{ flex: 1 }} onLayout={onLayoutRootView}>
       <VehicleState>
         <NavigationContainer>
           <GeneralStackNavigation />
