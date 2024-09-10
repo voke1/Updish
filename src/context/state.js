@@ -1,33 +1,31 @@
 import { createContext, useReducer, useContext } from "react";
-import vehicleReducer from "./reducer";
+import foodReducer from "./reducer";
 import {
-  FETCH_VEHICLE_LOADING,
-  FETCH_VEHICLE_SUCCESS,
-  FETCH_VEHICLE_FAILED,
-  SELECT_VEHICLE,
+  FETCH_FOOD_LOADING,
+  FETCH_FOOD_SUCCESS,
+  FETCH_FOOD_FAILED,
   IS_FETCH_MORE,
 } from "./action";
 import { data } from "../constants/constants";
 
-export const VehicleContext = createContext();
+export const FoodContext = createContext();
 
-export const VehicleState = (props) => {
+export const FoodState = (props) => {
   const initialState = {
-    vehicleLoading: false,
-    vehicles: [],
-    vehiclePagination: {},
-    isSearchVehicle: false,
-    searchedVehicleErrMsg: "",
-    fetchVehicleErrMsg: {},
-    searchedVehicles: [],
-    vehicle: { number: "", transporter: "", KMReading: "" },
+    foodLoading: false,
+    foods: [],
+    foodPagination: {},
+    isSearchFood: false,
+    searchedFoodErrMsg: "",
+    fetchFoodErrMsg: {},
+    searchedFoods: [],
+    food: {},
     isFetchMore: false,
-    vehicleError: "",
-    searchedVehiclePagination: {},
+    foodError: "",
+    searchedFoodPagination: {},
     searchedValue: "",
-    isAutoFilling: false,
   };
-  const [state, dispatch] = useReducer(vehicleReducer, initialState);
+  const [state, dispatch] = useReducer(foodReducer, initialState);
 
   const shouldFetchMore = (pagination) => {
     if (6 * parseInt(pagination.currentPage) > pagination.total) {
@@ -41,48 +39,49 @@ export const VehicleState = (props) => {
   const simulateAxiosCall = (currentPage) => {
     return new Promise((resolve) => {
       setTimeout(() => {
-        const { pagination, vehicles } = data;
+        const { pagination, foods } = data;
         const pageSize = pagination.pageSize;
         const startIndex = (currentPage - 1) * pageSize;
-        const paginatedVehicles = vehicles.slice(startIndex, currentPage * pageSize);
+        const paginatedFoods = foods.slice(
+          startIndex,
+          currentPage * pageSize
+        );
 
         resolve({
           pagination: { ...pagination, currentPage },
-          vehicles: paginatedVehicles,
+          foods: paginatedFoods,
         });
       }, 2000); // Simulate 1.5s delay
     });
   };
 
   // Fetch vehicles (TRACK AND TRACE)
-  const fetchVehicles = async () => {
+  const fetchFoods = async () => {
     dispatch({
-      type: FETCH_VEHICLE_LOADING,
-      payload: true
+      type: FETCH_FOOD_LOADING,
+      payload: true,
     });
     try {
       // Simulate fetching page 1 vehicles
       const res = await simulateAxiosCall(1);
-      const { vehicles, pagination } = res;
+      const { foods, pagination } = res;
 
-   
       dispatch({
-        type: FETCH_VEHICLE_SUCCESS,
-        payload: { vehicles, pagination },
+        type: FETCH_FOOD_SUCCESS,
+        payload: { foods, pagination },
       });
     } catch (error) {
-        dispatch({
-          type: FETCH_VEHICLE_FAILED,
-          payload: "couldn't fetch vehicles",
-        });
+      dispatch({
+        type: FETCH_FOOD_FAILED,
+        payload: "couldn't fetch foods",
+      });
     }
   };
 
-  const fetchMoreVehicles = async (pagination) => {
+  const fetchMoreFoods = async (pagination) => {
     // check if there are more vehicles in database
 
     if (!shouldFetchMore(pagination)) return;
-
 
     let currentPage = parseInt(pagination.currentPage) + 1;
 
@@ -93,38 +92,29 @@ export const VehicleState = (props) => {
     try {
       // Simulate fetching more vehicles
       const res = await simulateAxiosCall(currentPage);
-      const { vehicles, pagination } = res;
+      const { foods, pagination } = res;
 
-    
       dispatch({
-        type: FETCH_VEHICLE_SUCCESS,
-        payload: { vehicles: [...state.vehicles, ...vehicles], pagination },
+        type: FETCH_FOOD_SUCCESS,
+        payload: { foods: [...state.foods, ...foods], pagination },
       });
     } catch (error) {
       dispatch({
-        type: FETCH_VEHICLE_FAILED,
-        payload: "couldn't fetch vehicles",
+        type: FETCH_FOOD_FAILED,
+        payload: "couldn't fetch foods",
       });
     }
   };
 
-  const selectVehicle = (value) => {
-    dispatch({
-      type: SELECT_VEHICLE,
-      payload: value,
-    });
-  };
-
   return (
-    <VehicleContext.Provider
+    <FoodContext.Provider
       value={{
-        fetchVehicles,
-        selectVehicle,
-        fetchMoreVehicles,
+        fetchFoods,
+        fetchMoreFoods,
         ...state,
       }}
     >
       {props.children}
-    </VehicleContext.Provider>
+    </FoodContext.Provider>
   );
 };

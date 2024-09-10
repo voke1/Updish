@@ -16,7 +16,7 @@ import {
 import GeneralStackNavigation from "./src/navigator.js";
 
 // State
-import { VehicleState } from "./src/context/state";
+import { FoodState } from "./src/context/state";
 
 const App = () => {
   const [fontsLoaded] = useFonts({
@@ -60,11 +60,11 @@ const App = () => {
 
   return (
     <SafeAreaProvider style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <VehicleState>
+      <FoodState>
         <NavigationContainer>
           <GeneralStackNavigation />
         </NavigationContainer>
-      </VehicleState>
+      </FoodState>
     </SafeAreaProvider>
   );
 };

@@ -1,12 +1,12 @@
 import image from "./image";
-const { food1, food2, food3, food4, food5, food6, food7, food8, food9 } = image;
+const { food1, food2, food3, food9 } = image;
 export const data = {
   pagination: {
     currentPage: 1, // can be dynamically updated
     pageSize: 6,
     total: 30, // total number of vehicles
   },
-  vehicles: [
+  foods: [
     { id: 1, title: "Cheese Burger", image: food1, price: "₦1,500", review: 4 },
     { id: 2, title: "Beef Burger", image: food9, price: "₦2,500", review: 3 },
     { id: 3, title: "Beef Burger", image: food9, price: "₦2,600", review: 5 },

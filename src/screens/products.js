@@ -8,38 +8,38 @@ import {
   SafeAreaView,
   RefreshControl,
 } from "react-native";
-import { useContext, useState, useEffect, Fragment } from "react";
+import { useContext, useEffect, Fragment } from "react";
 import tw from "twrnc";
-import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NoContent from "../components/NoContent";
 import Header from "../components/Header";
-import { CoachingLoader } from "../components/SkeletonLoader";
-import { VehicleContext } from "../context/state";
+import { DocumentLoader } from "../components/SkeletonLoader";
+import { FoodContext } from "../context/state";
 import PaginationIndicator from "../components/PaginationIndicator";
 import image from "../constants/image";
 
 const ProductScreen = ({ route, navigation }) => {
   const { star } = image;
   const {
-    vehicles,
-    vehiclePagination,
-    vehicleLoading,
+    foods,
+    foodPagination,
+    foodLoading,
     isFetchMore,
-    fetchVehiclesErrMsg,
-    fetchVehicles,
-    fetchMoreVehicles,
-  } = useContext(VehicleContext);
+    fetchFoodsErrMsg,
+    fetchFoods,
+    fetchMoreFoods,
+  } = useContext(FoodContext);
 
   useEffect(() => {
-    fetchVehicles();
+    fetchFoods();
   }, []);
 
   const showActivities = () => {
     return (
       <>
-        {vehicleLoading ? (
-          <CoachingLoader />
-        ) : fetchVehiclesErrMsg ? (
+        {foodLoading ? (
+          <DocumentLoader />
+        ) : fetchFoodsErrMsg ? (
           <NoContent
             msg={"An error occured!"}
             icon={
@@ -50,9 +50,9 @@ const ProductScreen = ({ route, navigation }) => {
               />
             }
           />
-        ) : !(vehicles.length > 0) ? (
+        ) : !(foods.length > 0) ? (
           <NoContent
-            msg={"No Vehicles Found"}
+            msg={"No Foods Found"}
             icon={
               <MaterialCommunityIcons
                 name="collage"
@@ -65,18 +65,17 @@ const ProductScreen = ({ route, navigation }) => {
           <Fragment>
             {
               <FlatList
-                data={vehicles}
+                data={foods}
                 renderItem={({ item }) => (
                   <Pressable
                     style={[
                       tw`mb-7`,
                       {
                         flexDirection: "row",
-                        
                       },
                     ]}
                     onPress={() => {
-                      console.log('PRESSED')
+                      console.log("PRESSED");
                     }}
                   >
                     <View style={{ flex: 1 }}>
@@ -165,21 +164,21 @@ const ProductScreen = ({ route, navigation }) => {
                 keyExtractor={(item, index) => index}
                 showsVerticalScrollIndicator={false}
                 onEndReached={() => {
-                  fetchMoreVehicles(vehiclePagination);
+                  fetchMoreFoods(foodPagination);
                 }}
                 ListFooterComponent={() => (
                   <PaginationIndicator
-                    data={vehicles}
+                    data={foods}
                     loader={isFetchMore}
-                    pagination={vehiclePagination}
+                    pagination={foodPagination}
                   />
                 )}
                 refreshControl={
                   <RefreshControl
                     onRefresh={() => {
-                      fetchVehicles();
+                      fetchFoods();
                     }}
-                    refreshing={vehicleLoading}
+                    refreshing={foodLoading}
                     tintColor={"gray"}
                     colors={["gray"]}
                   />
