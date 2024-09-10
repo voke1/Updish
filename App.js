@@ -61,7 +61,7 @@ const App = () => {
 
   return (
     <SafeAreaProvider
-      style={{ flex: 1, backgroundColor: "#E4B511" }}
+      style={{ flex: 1 }}
       onLayout={onLayoutRootView}
     >
       <VehicleState>

@@ -9,7 +9,6 @@ import {
   RefreshControl,
 } from "react-native";
 import { useContext, useState, useEffect, Fragment } from "react";
-// import { UtilsContext } from "../../../../general/contexts/utils/state";
 import tw from "twrnc";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import NoContent from "../components/NoContent";
@@ -20,11 +19,7 @@ import PaginationIndicator from "../components/PaginationIndicator";
 import image from "../constants/image";
 
 const ProductScreen = ({ route, navigation }) => {
-  //   const { colorScheme } = useContext(UtilsContext);
-  //   const { noImage } = images;
-  //   const { textFormater, getTimeAgo } = Formater();
-  //   const { coachingID } = route.params;
-  const { food1 } = image;
+  const { star } = image;
   const {
     vehicles,
     vehiclePagination,
@@ -95,7 +90,7 @@ const ProductScreen = ({ route, navigation }) => {
                           },
                         ]}
                       >
-                        "ITEM NAME" {item.id}
+                        {item.id}. {item.title}
                       </Text>
                       <View
                         style={[
@@ -106,43 +101,18 @@ const ProductScreen = ({ route, navigation }) => {
                           },
                         ]}
                       >
-                        <View
-                          style={[
-                            tw`px-3 py-1 rounded-2xl`,
-                            {
-                              backgroundColor:
-                                item.severity === "high"
-                                  ? "#FF0000"
-                                  : item.severity === "medium"
-                                  ? "#FF8A00"
-                                  : "#FFE600",
-                            },
-                          ]}
+                        <Text
+                          style={{
+                            color: "#939393",
+                            fontFamily: "Raleway_400Regular",
+                          }}
                         >
-                          <Text
-                            style={[
-                              tw`capitalize`,
-                              {
-                                fontFamily: "Raleway_700Bold",
-                                color:
-                                  item.severity === "low"
-                                    ? "#000000"
-                                    : "#ffffff",
-                              },
-                            ]}
-                          >
-                            SEVERITY
-                          </Text>
-                        </View>
+                          {item.price}
+                        </Text>
                         <View style={tw`mx-2`}>
-                          <Text
-                            style={{
-                              fontSize: 20,
-                              color: "#939393",
-                            }}
-                          >
-                            •
-                          </Text>
+                         
+                          <Image source={star} style={{width: 10, height: 10}}/>
+
                         </View>
                         <Text
                           style={[
@@ -153,29 +123,41 @@ const ProductScreen = ({ route, navigation }) => {
                             },
                           ]}
                         >
-                          Uncoached
+                          {item.review}
                         </Text>
                       </View>
-                      <Text
-                        style={{
-                          color: "#939393",
-                          fontFamily: "Raleway_400Regular",
-                        }}
+                      <TouchableOpacity
+                        style={[
+                          tw`p-1 rounded-2xl`,
+                          {
+                            backgroundColor: "#8C63EE",
+                            width: 100,
+                          },
+                        ]}
                       >
-                        3 hours
-                      </Text>
+                        <Text
+                          style={[
+                            tw`capitalize`,
+                            {
+                              fontFamily: "Raleway_700Bold",
+                              color: "#ffffff",
+                              textAlign: "center",
+                            },
+                          ]}
+                        >
+                          Add to Cart
+                        </Text>
+                      </TouchableOpacity>
                     </View>
                     <View style={{ flex: 0.5, alignItems: "flex-end" }}>
                       <Image
-                      src={require("../../src/assets/great_food.png")}
-                      resizeMode='contain'
+                        source={item.image}
+                        resizeMode="contain"
                         style={{
                           width: 150,
                           height: 90,
                           borderRadius: 8,
-                        //   backgroundColor: 'black'
                         }}
-                        // tintColor='white'
                       />
                     </View>
                   </Pressable>
@@ -245,7 +227,7 @@ const ProductScreen = ({ route, navigation }) => {
               },
             ]}
           >
-            Event List
+            Menu
           </Text>
         </View>
         <View
