@@ -6,6 +6,7 @@ import {
   FlatList,
   TouchableOpacity,
   SafeAreaView,
+  RefreshControl,
 } from "react-native";
 import { useContext, useState, useEffect, Fragment } from "react";
 // import { UtilsContext } from "../../../../general/contexts/utils/state";
@@ -14,25 +15,36 @@ import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import NoContent from "../components/NoContent";
 import Header from "../components/Header";
 import { CoachingLoader } from "../components/SkeletonLoader";
+import { VehicleContext } from "../context/state";
+import PaginationIndicator from "../components/PaginationIndicator";
+import image from "../constants/image";
 
 const ProductScreen = ({ route, navigation }) => {
   //   const { colorScheme } = useContext(UtilsContext);
   //   const { noImage } = images;
   //   const { textFormater, getTimeAgo } = Formater();
   //   const { coachingID } = route.params;
-  //   const { isLoadingCoaching, coachingData, coachingError, fetchCoaching } =
-  //     useContext(SafetyContext);
+  const { food1 } = image;
+  const {
+    vehicles,
+    vehiclePagination,
+    vehicleLoading,
+    isFetchMore,
+    fetchVehiclesErrMsg,
+    fetchVehicles,
+    fetchMoreVehicles,
+  } = useContext(VehicleContext);
 
-  //   useEffect(() => {
-  //     fetchCoaching(coachingID);
-  //   }, []);
+  useEffect(() => {
+    fetchVehicles();
+  }, []);
 
   const showActivities = () => {
     return (
       <>
-        {"isLoadingCoaching" ? (
+        {vehicleLoading ? (
           <CoachingLoader />
-        ) : "coachingError" ? (
+        ) : fetchVehiclesErrMsg ? (
           <NoContent
             msg={"An error occured!"}
             icon={
@@ -43,9 +55,9 @@ const ProductScreen = ({ route, navigation }) => {
               />
             }
           />
-        ) : "!coachingData.eventList" ? (
+        ) : !(vehicles.length > 0) ? (
           <NoContent
-            msg={"No Events Found"}
+            msg={"No Vehicles Found"}
             icon={
               <MaterialCommunityIcons
                 name="collage"
@@ -58,7 +70,7 @@ const ProductScreen = ({ route, navigation }) => {
           <Fragment>
             {
               <FlatList
-                data={[coachingData.eventList]}
+                data={vehicles}
                 renderItem={({ item }) => (
                   <Pressable
                     style={[
@@ -83,7 +95,7 @@ const ProductScreen = ({ route, navigation }) => {
                           },
                         ]}
                       >
-                        "ITEM NAME"
+                        "ITEM NAME" {item.id}
                       </Text>
                       <View
                         style={[
@@ -155,17 +167,41 @@ const ProductScreen = ({ route, navigation }) => {
                     </View>
                     <View style={{ flex: 0.5, alignItems: "flex-end" }}>
                       <Image
+                      src={require("../../src/assets/great_food.png")}
+                      resizeMode='contain'
                         style={{
                           width: 150,
                           height: 90,
                           borderRadius: 8,
+                        //   backgroundColor: 'black'
                         }}
+                        // tintColor='white'
                       />
                     </View>
                   </Pressable>
                 )}
                 keyExtractor={(item, index) => index}
                 showsVerticalScrollIndicator={false}
+                onEndReached={() => {
+                  fetchMoreVehicles(vehiclePagination);
+                }}
+                ListFooterComponent={() => (
+                  <PaginationIndicator
+                    data={vehicles}
+                    loader={isFetchMore}
+                    pagination={vehiclePagination}
+                  />
+                )}
+                refreshControl={
+                  <RefreshControl
+                    onRefresh={() => {
+                      fetchVehicles();
+                    }}
+                    refreshing={vehicleLoading}
+                    tintColor={"gray"}
+                    colors={["gray"]}
+                  />
+                }
               />
             }
           </Fragment>
@@ -189,10 +225,7 @@ const ProductScreen = ({ route, navigation }) => {
         }}
       >
         {/* header */}
-        <Header
-          title={`Coaching #ID`}
-          showCancel={false}
-        />
+        <Header title={`Coaching #ID`} showCancel={false} />
         <View
           style={[
             tw`mx-4 mt-4`,

@@ -41,6 +41,8 @@ const VehicleReducer = (state, action) => {
         vehicleLoading: false,
         fetchVehicleErrMsg: { msg: action.payload, type: "bad" },
         isFetchMore: false,
+        vehicles: [],
+        vehiclePagination: {}
       };
 
     case SELECT_VEHICLE:
